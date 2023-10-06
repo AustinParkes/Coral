@@ -1,0 +1,91 @@
+# TODO:
+# 1) Merge addr and reset into an inline table for registers. 
+#    Helps keep the the corresponding addr and resets together
+#    (e.g. CR1 = {addr = 0x0, reset = 0x0} )
+# 2) Change 'addr' in 'flag' inline tables to 'PCaddr' so it's more descriptive
+# 2) Find better way to ignore keys than '0xFFFF' when user doesn't want to use the key.
+# 3) Add a way to change the flag count under 'flags' table. (e.g. Flag1 - Flagx)
+# 4) Can make an inline table for memory map to add additional 'alias' option to memory regions.
+# 5) Configuration registers could return to make certain flags configurable for interrupts.
+# 6) Give option to provide an address for an IRQ rather than IRQn. Can compute irqn from address. 
+
+
+[config]
+   
+    
+[config.core]
+cpu_model = "none"
+num_irq = 480
+bitband = 0
+
+[config.mem_map]
+flash_base = 0x0
+flash_size = 0x0
+sram_base = 0x0
+sram_size = 0x0
+sram_base2 = 0x0
+sram_size2 = 0x0
+sram_base3 = 0x0
+sram_size3 = 0x0
+
+[mmio]
+[mmio.count]
+mcg_count = 0
+uart_count = 1
+test_count = 0
+				
+    [mmio.uart.0]
+    [mmio.uart.0.config]
+    peripheral_type = 1
+    CR_count = 2
+    SR_count = 2
+    DR_count = 2
+    flag_count = 0
+
+    [mmio.uart.0.addr]
+    base_addr = 0x0
+    CR1_addr = 0x0
+    CR2_addr = 0x0
+    SR1_addr = 0x0
+    SR2_addr = 0x0
+    DR1_addr = 0x0
+    DR2_addr = 0x0
+
+    [mmio.uart.0.reset]
+    CR1_reset = 0x0
+    CR2_reset = 0x0
+    SR1_reset = 0x0
+    SR2_reset = 0x0
+    DR1_reset = 0x0
+    DR2_reset = 0x0
+
+    [mmio.uart.0.hardware]
+    RXFIFO_Size = 16
+    TXFIFO_Size = 16
+
+    [mmio.uart.0.interrupts]
+    uart = nan # Reserved for parser. Do not edit. 
+
+    [mmio.uart.0.interrupts.RX]
+    IRQn = "none"
+    Emulation_Mode = "full"
+    Intr_Enable = {CR = "none", bit = 0}
+    Intr_Disable = {CR = "none", bit = 0}
+    Intr_Status = {SR = "none", bit = 0}
+    Intr_Clear = {CR = "none"}    
+    Trigger = 1
+
+    [mmio.uart.0.interrupts.TX]
+    IRQn = "none"
+    Emulation_Mode = "full"
+    Intr_Enable = {CR = "none", bit = 0}
+    Intr_Disable = {CR = "none", bit = 0}
+    Intr_Status = {SR = "none", bit = 0} 
+    Intr_Clear = {CR = "none"}    
+    FIFO_Full = {SR = "none", bit = 0, polarity = 1}
+    FIFO_Size = {SR = "none"} 
+    FIFO_Count = {SR = "none"}        
+    Trigger = 8
+    [mmio.uart.0.interface]
+
+    [mmio.uart.0.flags]

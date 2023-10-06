@@ -1,0 +1,68 @@
+[cpu]
+cpu_model = "cortex-m4"
+num_irq = 480
+bitband = false
+
+[memory_map]
+flash_base = 0
+flash_size = 0x1f40000
+sram_base = 0x1fff0000
+sram_size = 0x3e800
+sram_base2 = 0x0
+sram_size2 = 0x0
+sram_base3 = 0x0
+sram_size3 = 0x0
+   
+    
+[mmio]
+[mmio.count]
+uart_count = 1
+mcg_count = 0       # Multi-purpose clock generator	
+    
+    [mmio.uart]
+    peripheral_type = "uart"
+    [mmio.uart.0]
+    [mmio.uart.0.register_config]
+    register_size = 1
+    cr_count = 1
+    sr_count = 1
+    dr_count = 1
+
+    [mmio.uart.0.sr_bypass_config]
+    sr_bypass_count = 0
+
+    [mmio.uart.0.addr]
+    base_addr = 0x40000000 
+    cr1_addr = 0x40000000
+    sr1_addr = 0x40000001 # currently unused
+    dr1_addr = 0x40000002 # unused 
+
+    [mmio.uart.0.reset]
+    cr1_reset = 0x0
+    sr1_reset = 0x0
+    dr1_reset = 0x0
+
+    [mmio.uart.0.hardware]
+    rx_fifo_size = 16
+    tx_fifo_size = 16
+
+    [mmio.uart.0.interrupts]
+    [mmio.uart.0.interrupts.RX]
+    irqn = 31
+    intr_enable = {cr = "cr4", bit = 5}
+    intr_disable = {cr = "none", bit = 0}
+    intr_status = {sr = "sr1", bit = 5}
+    intr_clear = {cr = "none"}    
+    trigger = 1                         # 1 should be the default here
+
+    [mmio.uart.0.interrupts.TX]
+    irqn = "none"
+    intr_enable = {cr = "none", bit = 0}
+    intr_disable = {cr = "none", bit = 0}
+    intr_status = {sr = "none", bit = 0} 
+    intr_clear = {cr = "none"}    
+    tx_enable = {cr = "none", bit = 0}
+    tx_disable = {cr = "none", bit = 0}  
+    trigger = "none"    
+
+ 

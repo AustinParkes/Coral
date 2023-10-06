@@ -1,0 +1,90 @@
+[cpu]
+cpu_model = "cortex-m4"
+num_irq = 480
+bitband = false
+
+[memory_map]
+flash_base = 0
+flash_size = 0x1f40000
+sram_base = 0x1fff0000
+sram_size = 0x3e800
+sram_base2 = 0x0
+sram_size2 = 0x0
+sram_base3 = 0x0
+sram_size3 = 0x0
+   
+# TODO: Get this configuration parsed.   
+[mmio]
+[mmio.config]
+register_size = 1
+
+[mmio.count]
+uart_count = 1
+mcg_count = 0       # Multi-purpose clock generator	
+
+[mmio.sr_bypass_count]
+bypass_count = 0
+    
+    [mmio.uart]
+    peripheral_type = "uart"
+    [mmio.uart.0]
+    [mmio.uart.0.register_config]
+    register_size = 1
+    cr_count = 7
+    sr_count = 1
+    dr_count = 1
+
+    [mmio.uart.0.addr]
+    base_addr = 0x40060000 
+    cr1_addr = 0x4006a000
+    cr2_addr = 0x4006a001   
+    cr3_addr = 0x4006a002   
+    cr4_addr = 0x4006a003   # RXFIFO interrupt enable bit is here
+    cr5_addr = 0x4006a008
+    cr6_addr = 0x4006a00c   
+    cr7_addr = 0x4006a015   # FIFO RX Watermark (RXWATER)
+    sr1_addr = 0x4006a004   # RXFIFO interrupt set bit is here
+    dr1_addr = 0x4006a007   # DR
+
+    [mmio.uart.0.reset]
+    cr1_reset = 0x0
+    cr2_reset = 0x0
+    cr3_reset = 0x0
+    cr4_reset = 0x0
+    cr5_reset = 0x0
+    cr6_reset = 0x0
+    cr7_reset = 0x1     # FIFO RX Watermark (RXWATER) 
+    sr1_reset = 0xC0    
+    dr1_reset = 0x0
+    
+    [mmio.uart.0.hardware]
+    rx_fifo_size = 16
+    tx_fifo_size = 16
+    
+    [mmio.uart.0.interrupts]
+    [mmio.uart.0.interrupts.RX]
+    irqn = 31
+    intr_enable = {cr = "cr4", bit = 5}
+    intr_disable = {cr = "none", bit = 0}
+    intr_status = {sr = "sr1", bit = 5}
+    intr_clear = {cr = "none"}    
+    trigger = 1                         # 1 should be the default here
+
+    [mmio.uart.0.interrupts.TX]
+    irqn = "none"
+    intr_enable = {cr = "none", bit = 0}
+    intr_disable = {cr = "none", bit = 0}
+    intr_status = {sr = "none", bit = 0} 
+    intr_clear = {cr = "none"}    
+    tx_enable = {cr = "none", bit = 0}
+    tx_disable = {cr = "none", bit = 0}  
+    trigger = "none"
+    
+    [mmio.uart.0.interface]
+    host = "stdio"
+    guest = "serial"    
+        
+    [mmio.sr_bypasses]
+    bypass1 = {reg_addr = 0x0, value = 0x0, pc_addr = 0x0}       
+
+
